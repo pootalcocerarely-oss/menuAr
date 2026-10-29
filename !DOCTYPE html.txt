@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Menú AR Restaurante</title>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-speech-command-component@latest/dist/aframe-speech-command-component.min.js"></script>
+</head>
+<body style="text-align:center; font-family:Arial;">
+  <h2>Selecciona tu platillo</h2>
+  <button onclick="mostrarPlatillo('quesadilla')">Quesadilla sencilla</button>
+  <button onclick="mostrarPlatillo('enchilada')">Enchilada sencilla</button>
+  <button onclick="mostrarPlatillo('picada')">Picada sencilla</button>
+
+  <a-scene embedded arjs>
+    <a-marker preset="hiro">
+      <a-entity id="platillo" position="0 0 0" scale="0.5 0.5 0.5"></a-entity>
+      <a-entity id="chefcito" gltf-model="url(chefcito.glb)" position="1 0 0" scale="0.3 0.3 0.3" animation="property: rotation; to: 0 360 0; loop: true; dur: 4000"></a-entity>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    function mostrarPlatillo(nombre) {
+      let modelo = '';
+      let mensaje = '';
+      if (nombre === 'quesadilla') {
+        modelo = 'quesadilla.glb';
+        mensaje = 'Esta quesadilla sencilla está hecha con queso fundido y tortilla dorada. ¡Perfecta para un antojito rápido!';
+      }
+      if (nombre === 'enchilada') {
+        modelo = 'enchilada.glb';
+        mensaje = 'La enchilada sencilla combina tortilla rellena y salsa roja casera. ¡Un clásico mexicano lleno de sabor!';
+      }
+      if (nombre === 'picada') {
+        modelo = 'picada.glb';
+        mensaje = 'La picada sencilla lleva frijoles, salsa y queso fresco sobre tortilla gruesa. ¡Ideal para compartir!';
+      }
+      document.getElementById('platillo').setAttribute('gltf-model', `url(${modelo})`);
+      hablarChefcito(mensaje);
+    }
+
+    function hablarChefcito(texto) {
+      const voz = new SpeechSynthesisUtterance(texto);
+      voz.lang = 'es-MX';
+      speechSynthesis.speak(voz);
+    }
+  </script>
+</body>
+</html>
